@@ -1,0 +1,58 @@
+<div class="top-bar">
+  <button (click)="addNewJob()">Add New Job</button>
+  <div class="filter">
+    <button (click)="toggleSearchInput()">Search</button>
+    <input *ngIf="showSearchInput" type="text" placeholder="Search..." />
+
+    <span class="person-icon">Person</span>
+
+    <select>
+      <option value="filter1">Filter 1</option>
+      <option value="filter2">Filter 2</option>
+    </select>
+  </div>
+
+  <button (click)="goToToday()">Today</button>
+
+  <span (click)="goToPreviousWeek()" class="arrow-icon"><</span>
+  <span (click)="goToNextWeek()" class="arrow-icon">></span>
+
+  <span>{{ currentDateRange }}</span>
+
+  <select>
+    <option value="weekly">Weekly View</option>
+    <option value="monthly">Monthly View</option>
+    <option value="daily">Daily View</option>
+  </select>
+</div>
+
+<div class="calendar-grid">
+  <div class="cell header time-header"></div>
+
+  <ng-container *ngFor="let day of days; let i = index">
+    <div class="cell header" [style.gridColumnStart]="i + 2">{{ day }}</div>
+  </ng-container>
+
+  <ng-container *ngFor="let time of times; let i = index">
+    <div
+      class="cell time"
+      [style.gridRowStart]="i + 2"
+      [style.gridColumnStart]="1"
+    >
+      {{ time }}
+    </div>
+    <ng-container *ngFor="let day of days; let j = index">
+      <div
+        class="cell job-container"
+        [style.gridRowStart]="i + 2"
+        [style.gridColumnStart]="j + 2"
+      >
+        <ng-container *ngFor="let job of getJobsForDayAndTime(day, time)">
+          <div [ngStyle]="getJobStyle(job)" class="job-entry">
+            {{ job.title }}
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
